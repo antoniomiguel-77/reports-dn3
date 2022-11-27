@@ -4,11 +4,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TaskController;
 use App\Models\Task;
-use App\Models\User;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\DB;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,7 +18,7 @@ use Illuminate\Support\Facades\DB;
 |
 */
 //Acesso ao sistema
-Route::controller(TaskController::class)->group(function(){
+Route::controller(TaskController::class)->prefix('/')->group(function(){
     Route::get('/','login')->name('login');
     Route::get('/tarefas','task')->name('dashboard')->middleware(['auth', 'verified']);
     Route::get('/adicionar/tarefas','addTask')->name('add.task')->middleware(['auth', 'verified']);
@@ -30,41 +27,34 @@ Route::controller(TaskController::class)->group(function(){
     
     Route::get('/pendente/{id}','task_pending')->name('pause.task')->middleware(['auth', 'verified']);
     Route::get('/terminada/{id}','task_done')->name('pause.task')->middleware(['auth', 'verified']);
-    Route::get('/deletar/{id}','task_delete')->name('delete.task')->middleware(['auth', 'verified']);
+    Route::get('/editar/{id}','task_edit')->name('edit.task')->middleware(['auth', 'verified']);
+    Route::post('/actualizar','task_update')->name('update.task')->middleware(['auth', 'verified']);
     
+    Route::get('/relatorios','reports')->name('reports')->middleware(['auth', 'verified','admin']);
+    Route::post('/relatorios','make_report')->name('make.reports')->middleware(['auth', 'verified','admin']);
     Route::get('/relatorio','report')->name('report.task')->middleware(['auth', 'verified']);
     
     
 
+    Route::get('/other','other_weekend')->name('new_weekend')->middleware(['auth', 'verified','admin']);
+    // Criar usuario root
+    Route::get("/root",'user_root');
+    //Fim 
 });
 
-// Criar usuario root
-Route::get("/root",function(){
-    $user = User::where('email','=','root@gmail.com')->get();
-    $password = Hash::make('12345678');
-    if($user->count() > 0){
+Route::get("/date",function(){
+    $dateNow = date('H:i');
+    $time = '13:23';
 
-        DB::update('update users set name = ?, level = ?, password= ? where email = ?', ['ADMIN','admin',$password,'root@gmail.com']);
-        return redirect()->to('/');
-    }else{
+        if($dateNow === $time){
 
-        User::create([
-            'name'=>'ADMIN',
-            'level'=>'admin',
-            'email'=>'root@gmail.com',
-            'password'=>Hash::make('12345678'),
-        ]);
-        return redirect()->to('/');
-    }
-
- });
- //Fim 
+            return 'igual';
+        }
+  
+            return $dateNow;
+});
 
 
- Route::get('/fresh',function(){
-    Artisan::call('migrate:fresh');
-    return redirect()->back();
- });
 
 
 

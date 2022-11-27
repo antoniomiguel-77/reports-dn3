@@ -41,6 +41,13 @@
             <script src="{{asset('js/fontawesome.min.js')}}"></script>
             @livewireScripts
            
+            <script>
+
+                setTimeout(() => {
+                  let msg =  document.querySelector('.setTime');
+                  msg.style = 'display:none';
+                }, 1500);
+            </script>
         </div>
     </body>
 </html>

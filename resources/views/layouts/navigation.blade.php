@@ -17,8 +17,27 @@
                       Tarefas
                     </x-nav-link>
                     <x-nav-link :href="route('add.task')" :active="request()->routeIs('add.task')">
-                      Adicionar Tarefas
+                      Adicionar Tarefa
                     </x-nav-link>
+                    @if (auth()->user()->level === 'admin')
+                        
+                    <x-nav-link :href="route('reports')" :active="request()->routeIs('reports')">
+                        Relatórios
+                    </x-nav-link>
+                    @php
+                        $day_now = abs(date('d'));
+                        $time = date('H:i');
+                        $old_date = App\Models\Control::find(1);
+
+                    @endphp
+                     @if( $day_now === $old_date->day && $old_date->time === $time) 
+                    <x-nav-link href="{{route('new_weekend')}}" :active="request()->routeIs('new_weekend')" class="btn btn-sm btn-dark text-white">
+                           <i class="fa fa-refresh"></i>
+                          Nova Semana
+                    </x-nav-link>
+                      @endif
+
+                     @endif
 
                 </div>
             </div>
@@ -40,8 +59,11 @@
 
                     <x-slot name="content">
                         <x-dropdown-link :href="route('profile.edit')">
-                            {{ __('Profile') }}
+                            <i class="fa fa-user"></i>
+                           Minha Conta
                         </x-dropdown-link>
+
+
 
                         <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}">
@@ -50,7 +72,8 @@
                             <x-dropdown-link :href="route('logout')"
                                     onclick="event.preventDefault();
                                                 this.closest('form').submit();">
-                                {{ __('Log Out') }}
+                              <i class="fa fa-out"></i>
+                              Terminar Sessão
                             </x-dropdown-link>
                         </form>
                     </x-slot>

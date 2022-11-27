@@ -15,8 +15,9 @@ return new class extends Migration
     {
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name',255);
             $table->text('description');
+            $table->string('other')->nullable()->default('');
             $table->enum('status',['pending','done','new'])->default('new');
             $table->foreignId('user_id')->constraint('users')
                     ->onDelete('CASCADE');
