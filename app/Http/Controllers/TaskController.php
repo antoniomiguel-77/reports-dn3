@@ -169,7 +169,7 @@ class TaskController extends Controller
    public function other_weekend(){
     try{
         $new_day = date('d',strtotime('8 days'));
-        
+      
         $finnaly = DB::update('update tasks set other = ?',['finished']);
         $days = DB::select('select day,time from control_days');
 
@@ -198,11 +198,14 @@ class TaskController extends Controller
     $user = User::where('email','=','root@gmail.com')->get();
     $password = Hash::make('12345678');
     if($user->count() > 0){
+
         DB::insert('insert into  control_days(day,time) values(?,?)',[date('d',strtotime('7 days')),'16:00']);
         DB::update('update users set name = ?, level = ?, password= ? where email = ?', ['ADMIN','admin',$password,'root@gmail.com']);
         return redirect()->to('/');
     }else{
-
+        $day = date('d','5 days');
+        $time = '16:30';
+       DB::insert('insert into control_days(day,time) values(?,?)',[$day,$time]);
         User::create([
             'name'=>'ADMIN',
             'level'=>'admin',

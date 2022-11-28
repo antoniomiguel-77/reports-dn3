@@ -29,6 +29,7 @@
                         $time = date('H:i');
                         $old_date = App\Models\Control::find(1);
 
+
                     @endphp
                      @if( $day_now === $old_date->day && $old_date->time === $time) 
                     <x-nav-link href="{{route('new_weekend')}}" :active="request()->routeIs('new_weekend')" class="btn btn-sm btn-dark text-white">
@@ -72,7 +73,7 @@
                             <x-dropdown-link :href="route('logout')"
                                     onclick="event.preventDefault();
                                                 this.closest('form').submit();">
-                              <i class="fa fa-out"></i>
+                              <i class="fa fa-close"></i>
                               Terminar Sessão
                             </x-dropdown-link>
                         </form>
